@@ -1,0 +1,56 @@
+---
+const { title = "Bread and Beyond", transparentHeader = false } = Astro.props;
+
+const categories = [
+  { name: "Breads", slug: "breads" },
+  { name: "Mains", slug: "mains" },
+  { name: "Soups & Sides", slug: "soups-sides" },
+  { name: "Desserts", slug: "desserts" },
+  { name: "Drinks", slug: "drinks" },
+  { name: "Holidays", slug: "holidays" },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/bread-and-beyond/styles/global.css" />
+</head>
+<body>
+  <header class={transparentHeader ? "site-header site-header--transparent" : "site-header"} id="site-header">
+    <a href="/bread-and-beyond/" class="logo">Bread and Beyond</a>
+    <nav>
+      <a href="/bread-and-beyond/">Home</a>
+      {categories.map((cat) => (
+        <a href={`/bread-and-beyond/category/${cat.slug}/`}>{cat.name}</a>
+      ))}
+    </nav>
+  </header>
+  <main>
+    <slot />
+  </main>
+  <footer class="site-footer">
+    <p>&copy; {new Date().getFullYear()} Bread and Beyond</p>
+  </footer>
+
+  <script>
+    const header = document.getElementById('site-header');
+    if (header && header.classList.contains('site-header--transparent')) {
+      const onScroll = () => {
+        if (window.scrollY > 60) {
+          header.classList.add('site-header--scrolled');
+        } else {
+          header.classList.remove('site-header--scrolled');
+        }
+      };
+      window.addEventListener('scroll', onScroll);
+      onScroll();
+    }
+  </script>
+</body>
+</html>

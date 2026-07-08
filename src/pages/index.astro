@@ -1,17 +1,30 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
 
+const quickPicks = [
+  { title: "Challah", blurb: "Soft, slightly sweet, perfect for Shabbat", image: "/bread-and-beyond/images/recipes/challah.jpg", href: "/bread-and-beyond/recipes/challah/" },
+  { title: "Focaccia", blurb: "Crisp edges, airy crumb, herby olive oil", image: "/bread-and-beyond/images/recipes/focaccia.jpg", href: "/bread-and-beyond/recipes/focaccia/" },
+  { title: "Chocolate Chip Cookies", blurb: "Crackly edges, gooey center", image: "/bread-and-beyond/images/recipes/chocolate-chip-cookies.jpg", href: "/bread-and-beyond/recipes/chocolate-chip-cookies/" },
+];
 ---
+<BaseLayout title="Bread and Beyond — Home" transparentHeader={true}>
+  <section class="hero hero--with-header">
+    <h1>Yoni's Recipe Book</h1>
+    <p>Family tested favorites & holiday keepers</p>
+    <a href="/bread-and-beyond/recipes/" class="button">Browse All Recipes</a>
+  </section>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+  <section class="quick-picks">
+    <h2>Favorites</h2>
+    <div class="quick-picks-grid">
+      {quickPicks.map((item) => (
+        <div class="quick-pick-card">
+          <img src={item.image} alt={item.title} />
+          <h3>{item.title}</h3>
+          <p>{item.blurb}</p>
+          <a href={item.href} class="button">View Recipe</a>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
