@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const categories = ["breads", "mains", "soups-sides", "desserts", "drinks", "holidays"];
+  return categories.map((category) => ({ params: { category } }));
+}
+
+const { category } = Astro.params;
+const allRecipes = await getCollection('recipes');
+const filtered = allRecipes.filter((r) => r.data.category === category);
+
+const displayNames = {
+  "breads": "Breads",
+  "mains": "Mains",
+  "soups-sides": "Soups & Sides",
+  "desserts": "Desserts",
+  "drinks": "Drinks",
+  "holidays": "Holidays",
+};
+---
+<BaseLayout title={`${displayNames[category]} Recipes`}>
+  <div class="recipe-page-header">
+    <h1>{displayNames[category]}</h1>
+  </div>
+  <div class="recipe-grid">
+    {filtered.map((recipe) => (
+      <a href={`/bread-and-beyond/recipes/${recipe.id}/`} class="recipe-card">
+        <img src={recipe.data.image} alt={recipe.data.title} />
+        <h3>{recipe.data.title}</h3>
+      </a>
+    ))}
+  </div>
+  {filtered.length === 0 && <p style="text-align:center; padding: 2rem;">No recipes here yet — check back soon!</p>}
+</BaseLayout>

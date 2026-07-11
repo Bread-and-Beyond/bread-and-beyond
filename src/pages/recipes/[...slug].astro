@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const recipes = await getCollection('recipes');
+  return recipes.map((recipe) => ({
+    params: { slug: recipe.id },
+    props: { recipe },
+  }));
+}
+
+const { recipe } = Astro.props;
+---
+<BaseLayout title={recipe.data.title}>
+  <div class="recipe-page-header">
+    <h1>{recipe.data.title}</h1>
+    <div class="recipe-meta">
+      {recipe.data.dietary && <span>{recipe.data.dietary}</span>}
+      {recipe.data.servings && <span>{recipe.data.servings}</span>}
+      {recipe.data.cookTime && <span>{recipe.data.cookTime}</span>}
+    </div>
+  </div>
+
+  <div class="recipe-body">
+    <div class="recipe-ingredients">
+      <h2>Ingredients</h2>
+      {recipe.data.ingredientGroups.map((group) => (
+        <div class="ingredient-group">
+          {group.heading && <p class="ingredient-group-heading">{group.heading}</p>}
+          <ul>
+            {group.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="recipe-directions">
+      <h2>Directions</h2>
+      <ol>
+        {recipe.data.steps.map((step) => <li>{step}</li>)}
+      </ol>
+    </div>
+  </div>
+
+  {recipe.data.notes && (
+    <aside class="notes">
+      <strong>Notes:</strong> {recipe.data.notes}
+    </aside>
+  )}
+</BaseLayout>

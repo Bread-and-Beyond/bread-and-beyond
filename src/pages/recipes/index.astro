@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const allRecipes = (await getCollection('recipes')).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+---
+<BaseLayout title="All Recipes">
+  <div class="recipe-page-header">
+    <h1>All Recipes</h1>
+  </div>
+  <div class="recipe-grid">
+    {allRecipes.map((recipe) => (
+      <a href={`/bread-and-beyond/recipes/${recipe.id}/`} class="recipe-card">
+        <img src={recipe.data.image} alt={recipe.data.title} />
+        <h3>{recipe.data.title}</h3>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

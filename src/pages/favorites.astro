@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const favorites = (await getCollection('recipes')).filter((r) => r.data.favorite);
+---
+<BaseLayout title="Favorites">
+  <div class="recipe-page-header">
+    <h1>⭐ Favorites</h1>
+  </div>
+  <div class="recipe-grid">
+    {favorites.map((recipe) => (
+      <a href={`/bread-and-beyond/recipes/${recipe.id}/`} class="recipe-card">
+        <img src={recipe.data.image} alt={recipe.data.title} />
+        <h3>{recipe.data.title}</h3>
+      </a>
+    ))}
+  </div>
+</BaseLayout>
